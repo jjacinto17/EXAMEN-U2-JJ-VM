@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Unidad 2</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"
+        integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="time" id="timeInput">
+    <script>
+        let hora;
+        let minuto;
+        let segundo;
+
+        let intervaloReloj;
+
+        let horaSeteada = false;
+
+        function setup() {
+            createCanvas(400, 400);
+            angleMode(DEGREES);
+        }
+
+        function draw() {
+            background(255);
+            translate(width / 2, height / 2);
+            if (horaSeteada) {
+
+                dibujarReloj();
+
+                dibujarManecillas();
+            }
+        }
+
+        function dibujarManecillas() {
+            let centroX = 0;
+            let centroY = 0;
+
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            drawLine(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
+            console.log(segundo);
+
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            drawLine(centroX, centroY, minutoX, minutoY, color(0));
+
+            let horaX = centroX + 70 * cos(map(hora % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaY = centroY + 70 * sin(map(hora % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            drawLine(centroX, centroY, horaX, horaY, color(0));
+        }
+
+        function drawLine(x1, y1, x2, y2, color) {
+            stroke(color);
+            strokeWeight(2);
+            let m = (y2 - y1) / (x2 - x1);
+            let b = y1 - m * x1;
+            if (abs(x2 - x1) > abs(y2 - y1)) {
+                let start = min(x1, x2);
+                let end = max(x1, x2);
+                for (let x = start; x <= end; x++) {
+                    let y = m * x + b;
+                    point(x, y);
+                }
+            } else {
+                let start = min(y1, y2);
+                let end = max(y1, y2);
+                for (let y = start; y <= end; y++) {
+                    let x = (y - b) / m;
+                    point(x, y);
+                }
+            }
+        }
+
+        function dibujarReloj() {
+            noFill();
+            stroke(0);
+            strokeWeight(2);
+            ellipse(0, 0, 300);
+
+            textSize(20);
+            textAlign(CENTER, CENTER);
+            for (let i = 1; i <= 12; i++) {
+                let angulo = map(i, 0, 12, 0, 360);
+                let x = 150 * cos(angulo);
+                let y = 150 * sin(angulo);
+                text(i, x, y);
+            }
+        }
+
+        function iniciarReloj() {
+            if (!horaSeteada) return;
+            clearInterval(intervaloReloj); 
+            intervaloReloj = setInterval(actualizarHora, 1000); 
+        }
+
+        function actualizarHora() {
+            segundo++;
+            if (segundo >= 60) {
+                segundo = 0;
+                minuto++;
+                if (minuto >= 60) {
+                    minuto = 0;
+                    hora++;
+                    if (hora >= 24) {
+                        hora = 0;
+                    }
+                }
+            }
+        }
+
+        function obtenerHoraDesdeInput() {
+            let timeInput = document.getElementById('timeInput').value;
+            let parts = timeInput.split(':');
+            hora = int(parts[0]);
+            minuto = int(parts[1]);
+            segundo = 0;
+            horaSeteada = true;
+            iniciarReloj();
+        }
+
+        document.getElementById('timeInput').addEventListener('input', function () {
+            obtenerHoraDesdeInput();
+        });
+
+    </script>
+</body>
+
+</html>
