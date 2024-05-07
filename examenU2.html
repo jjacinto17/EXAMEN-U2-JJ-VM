@@ -10,48 +10,59 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            position: relative;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         }
 
         canvas {
             border: 2px solid black;
+            width: 50vw;
+            height: 50vh;
+        }
+
+        .reloj-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80vw;
+            position: absolute;
+            top: 5vh;
+            left: 10vw;
         }
 
         .reloj-nombre {
-            position: absolute;
-            width: 100%;
             text-align: center;
-            font-size: 20px;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 2vh;
+            position: absolute;
         }
 
         .reloj-nombre:nth-child(1) {
-            top: 190px;
-            left: -280px;
+            top: 20vh;
+            left: 20vw;
         }
 
         .reloj-nombre:nth-child(2) {
-            top: 190px;
-            left: 50px;
+            top: 20vh;
+            left: 39vw;
         }
 
         .reloj-nombre:nth-child(3) {
-            top: 190px;
-            left: 390px;
+            top: 20vh;
+            left: 63vw;
         }
     </style>
 </head>
-
 <body>
-    <div class="reloj-nombre">La Paz</div>
-    <div class="reloj-nombre">Ciudad de México</div>
-    <div class="reloj-nombre">Barcelona, Esp</div>
-    <input type="time" id="timeInput" style="position: absolute; top: 600px; left: 700px;">
+    <div class="reloj-container">
+        <div class="reloj-nombre">La Paz</div>
+        <div class="reloj-nombre">Ciudad de México</div>
+        <div class="reloj-nombre">Barcelona, Esp</div>
+    </div>
+    <input type="time" id="timeInput" style="position: absolute; top: 80vh; left: 45vw;">
     <script>
         let hora;
         let minuto;
