@@ -15,16 +15,43 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
 
         canvas {
             border: 2px solid black;
         }
+
+        .reloj-nombre {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .reloj-nombre:nth-child(1) {
+            top: 190px;
+            left: -280px;
+        }
+
+        .reloj-nombre:nth-child(2) {
+            top: 190px;
+            left: 50px;
+        }
+
+        .reloj-nombre:nth-child(3) {
+            top: 190px;
+            left: 390px;
+        }
     </style>
 </head>
 
 <body>
-    <input type="time" id="timeInput">
+    <div class="reloj-nombre">La Paz</div>
+    <div class="reloj-nombre">Ciudad de México</div>
+    <div class="reloj-nombre">Barcelona, Esp</div>
+    <input type="time" id="timeInput" style="position: absolute; top: 600px; left: 700px;">
     <script>
         let hora;
         let minuto;
@@ -55,16 +82,16 @@
             let centroX = x;
             let centroY = y;
 
-            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
-            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, -90, 270)); 
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, -90, 270)); 
             drawLine(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
 
-            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
-            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, -90, 270));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, -90, 270)); 
             drawLine(centroX, centroY, minutoX, minutoY, color(0));
 
-            let horaX = centroX + 70 * cos(map(hora % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
-            let horaY = centroY + 70 * sin(map(hora % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaX = centroX + 70 * cos(map(hora % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30)); 
+            let horaY = centroY + 70 * sin(map(hora % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30)); 
             drawLine(centroX, centroY, horaX, horaY, color(0));
         }
 
@@ -99,7 +126,7 @@
             textSize(20);
             textAlign(CENTER, CENTER);
             for (let i = 1; i <= 12; i++) {
-                let angulo = map(i, 0, 12, 0, 360);
+                let angulo = map(i, 1, 13, -60, 300);
                 let xPos = x + 150 * cos(angulo);
                 let yPos = y + 150 * sin(angulo);
                 text(i, xPos, yPos);
@@ -117,7 +144,7 @@
             textSize(20);
             textAlign(CENTER, CENTER);
             for (let i = 1; i <= 12; i++) {
-                let angulo = map(i, 0, 12, 0, 360);
+                let angulo = map(i, 1, 13, -60, 300);
                 let xPos = x + 150 * cos(angulo);
                 let yPos = y + 150 * sin(angulo);
                 text(i, xPos, yPos);
@@ -128,16 +155,16 @@
             let centroX = x;
             let centroY = y;
 
-            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
-            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, -90, 270));
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, -90, 270));
             drawLineDDA(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
 
-            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
-            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, -90, 270));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, -90, 270));
             drawLineDDA(centroX, centroY, minutoX, minutoY, color(0));
 
-            let horaX = centroX + 70 * cos(map(horaDDA % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
-            let horaY = centroY + 70 * sin(map(horaDDA % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaX = centroX + 70 * cos(map(horaDDA % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30));
+            let horaY = centroY + 70 * sin(map(horaDDA % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30));
             drawLineDDA(centroX, centroY, horaX, horaY, color(0));
         }
 
@@ -170,27 +197,27 @@
             textSize(20);
             textAlign(CENTER, CENTER);
             for (let i = 1; i <= 12; i++) {
-                let angulo = map(i, 0, 12, 0, 360);
+                let angulo = map(i, 1, 13, -60, 300);
                 let xPos = x + 150 * cos(angulo);
                 let yPos = y + 150 * sin(angulo);
                 text(i, xPos, yPos);
             }
 
-            let horaBresenham = (hora + 9) % 24;
+            let horaBresenham = (hora + 8) % 24;
 
             let centroX = x;
             let centroY = y;
 
-            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
-            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, -90, 270));
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, -90, 270));
             drawLineBresenham(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
 
-            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
-            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, -90, 270));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, -90, 270));
             drawLineBresenham(centroX, centroY, minutoX, minutoY, color(0));
 
-            let horaX = centroX + 70 * cos(map(horaBresenham % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
-            let horaY = centroY + 70 * sin(map(horaBresenham % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaX = centroX + 70 * cos(map(horaBresenham % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30));
+            let horaY = centroY + 70 * sin(map(horaBresenham % 12, 0, 12, -90, 270) + map(minuto, 0, 60, 0, 30));
             drawLineBresenham(centroX, centroY, horaX, horaY, color(0));
         }
 
@@ -216,8 +243,8 @@
 
         function iniciarReloj() {
             if (!horaSeteada) return;
-            clearInterval(intervaloReloj); 
-            intervaloReloj = setInterval(actualizarHora, 1000); 
+            clearInterval(intervaloReloj);
+            intervaloReloj = setInterval(actualizarHora, 1000);
         }
 
         function actualizarHora() {
