@@ -35,29 +35,29 @@
         let horaSeteada = false;
 
         function setup() {
-            createCanvas(400, 400);
+            createCanvas(1200, 400);
             angleMode(DEGREES);
         }
 
         function draw() {
             background(255);
-            translate(width / 2, height / 2);
+            translate(width / 4, height / 2);
             if (horaSeteada) {
+                dibujarReloj(20, 20);
 
-                dibujarReloj();
+                dibujarRelojDDA(350, 20);
 
-                dibujarManecillas();
+                dibujarRelojBresenham(700, 20);
             }
         }
 
-        function dibujarManecillas() {
-            let centroX = 0;
-            let centroY = 0;
+        function dibujarManecillas(x, y) {
+            let centroX = x;
+            let centroY = y;
 
             let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
             let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
             drawLine(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
-            console.log(segundo);
 
             let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
             let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
@@ -90,19 +90,127 @@
             }
         }
 
-        function dibujarReloj() {
+        function dibujarReloj(x, y) {
             noFill();
             stroke(0);
             strokeWeight(2);
-            ellipse(0, 0, 300);
+            ellipse(x, y, 300);
 
             textSize(20);
             textAlign(CENTER, CENTER);
             for (let i = 1; i <= 12; i++) {
                 let angulo = map(i, 0, 12, 0, 360);
-                let x = 150 * cos(angulo);
-                let y = 150 * sin(angulo);
-                text(i, x, y);
+                let xPos = x + 150 * cos(angulo);
+                let yPos = y + 150 * sin(angulo);
+                text(i, xPos, yPos);
+            }
+
+            dibujarManecillas(x, y);
+        }
+
+        function dibujarRelojDDA(x, y) {
+            noFill();
+            stroke(0);
+            strokeWeight(2);
+            ellipse(x, y, 300);
+
+            textSize(20);
+            textAlign(CENTER, CENTER);
+            for (let i = 1; i <= 12; i++) {
+                let angulo = map(i, 0, 12, 0, 360);
+                let xPos = x + 150 * cos(angulo);
+                let yPos = y + 150 * sin(angulo);
+                text(i, xPos, yPos);
+            }
+
+            let horaDDA = (hora + 1) % 24;
+
+            let centroX = x;
+            let centroY = y;
+
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            drawLineDDA(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
+
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            drawLineDDA(centroX, centroY, minutoX, minutoY, color(0));
+
+            let horaX = centroX + 70 * cos(map(horaDDA % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaY = centroY + 70 * sin(map(horaDDA % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            drawLineDDA(centroX, centroY, horaX, horaY, color(0));
+        }
+
+        function drawLineDDA(x1, y1, x2, y2, color) {
+            stroke(color);
+            strokeWeight(2);
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            let steps = Math.max(Math.abs(dx), Math.abs(dy));
+
+            let xIncrement = dx / steps;
+            let yIncrement = dy / steps;
+
+            let x = x1;
+            let y = y1;
+
+            for (let i = 0; i <= steps; i++) {
+                point(x, y);
+                x += xIncrement;
+                y += yIncrement;
+            }
+        }
+
+        function dibujarRelojBresenham(x, y) {
+            noFill();
+            stroke(0);
+            strokeWeight(2);
+            ellipse(x, y, 300);
+
+            textSize(20);
+            textAlign(CENTER, CENTER);
+            for (let i = 1; i <= 12; i++) {
+                let angulo = map(i, 0, 12, 0, 360);
+                let xPos = x + 150 * cos(angulo);
+                let yPos = y + 150 * sin(angulo);
+                text(i, xPos, yPos);
+            }
+
+            let horaBresenham = (hora + 9) % 24;
+
+            let centroX = x;
+            let centroY = y;
+
+            let segundoX = centroX + 100 * cos(map(segundo, 0, 60, 0, 360));
+            let segundoY = centroY + 100 * sin(map(segundo, 0, 60, 0, 360));
+            drawLineBresenham(centroX, centroY, segundoX, segundoY, color(255, 0, 0));
+
+            let minutoX = centroX + 90 * cos(map(minuto, 0, 60, 0, 360));
+            let minutoY = centroY + 90 * sin(map(minuto, 0, 60, 0, 360));
+            drawLineBresenham(centroX, centroY, minutoX, minutoY, color(0));
+
+            let horaX = centroX + 70 * cos(map(horaBresenham % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            let horaY = centroY + 70 * sin(map(horaBresenham % 12, 0, 12, 0, 360) + map(minuto, 0, 60, 0, 30));
+            drawLineBresenham(centroX, centroY, horaX, horaY, color(0));
+        }
+
+        function drawLineBresenham(x1, y1, x2, y2, color) {
+            stroke(color);
+            strokeWeight(2);
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            let steps = Math.max(Math.abs(dx), Math.abs(dy));
+
+            let xIncrement = dx / steps;
+            let yIncrement = dy / steps;
+
+            let x = x1;
+            let y = y1;
+
+            for (let i = 0; i <= steps; i++) {
+                point(x, y);
+                x += xIncrement;
+                y += yIncrement;
             }
         }
 
